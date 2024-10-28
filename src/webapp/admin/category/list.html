@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Category Management</title>
+</head>
+<body>
+<h1>Category Management</h1>
+
+<h2>Add Category</h2>
+<form th:action="@{/api/category/addCategory}" method="post" enctype="multipart/form-data">
+    <label for="categoryName">Category Name:</label>
+    <input type="text" id="categoryName" name="categoryName" required>
+    <label for="icon">Icon:</label>
+    <input type="file" id="icon" name="icon" required>
+    <button type="submit">Add Category</button>
+</form>
+
+<h2>Category List</h2>
+<table>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Icon</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="category : ${categories}">
+        <td th:text="${category.categoryId}">1</td>
+        <td th:text="${category.categoryName}">Category Name</td>
+        <td><img th:src="@{/uploads/{icon}(icon=${category.icon})}" alt="Icon" width="50"></td>
+        <td>
+            <form th:action="@{/api/category/deleteCategory}" method="post">
+                <input type="hidden" name="categoryId" th:value="${category.categoryId}">
+                <button type="submit">Delete</button>
+            </form>
+            <form th:action="@{/api/category/updateCategory}" method="post">
+                <input type="hidden" name="categoryId" th:value="${category.categoryId}">
+                <button type="submit">Edit</button>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>
