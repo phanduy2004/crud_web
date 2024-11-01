@@ -1,0 +1,208 @@
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 20px;
+        background-color: #f4f4f9;
+        color: #333;
+    }
+
+    h1 {
+        color: #5d5d8d;
+        font-size: 2em;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    form {
+        background-color: #ffffff;
+        border: 1px solid #ddd;
+        padding: 15px;
+        border-radius: 5px;
+        max-width: 500px;
+        margin: 20px auto;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    input[type="text"] {
+        width: calc(100% - 22px);
+        padding: 10px;
+        margin-bottom: 15px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-size: 1em;
+    }
+
+    button[type="submit"] {
+        background-color: #5d5d8d;
+        color: #ffffff;
+        padding: 10px 15px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 1em;
+        transition: background-color 0.3s ease;
+    }
+
+    button[type="submit"]:hover {
+        background-color: #48487a;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+        background-color: #fff;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    table, th, td {
+        border: 1px solid #ddd;
+    }
+
+    th, td {
+        padding: 12px;
+        text-align: center;
+        font-size: 1em;
+    }
+
+    th {
+        background-color: #5d5d8d;
+        color: #fff;
+        font-weight: bold;
+    }
+
+    td img {
+        width: 50px;
+        height: auto;
+        border-radius: 4px;
+    }
+
+    td form {
+        display: inline-block;
+        margin: 0;
+    }
+
+    td button[type="submit"] {
+        background-color: #d9534f;
+        padding: 5px 10px;
+        border-radius: 3px;
+        font-size: 0.9em;
+    }
+
+    td button[type="submit"]:hover {
+        background-color: #c9302c;
+    }
+
+    .logo {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        width: 50px;
+        height: auto;
+    }
+
+    /* Pagination */
+    ul {
+        display: flex;
+        list-style: none;
+        padding: 0;
+        justify-content: center;
+        margin-top: 20px;
+    }
+
+    ul li {
+        margin: 0 5px;
+    }
+
+    .page-item a {
+        display: block;
+        padding: 8px 12px;
+        background-color: #e9e9ef;
+        color: #333;
+        text-decoration: none;
+        border-radius: 4px;
+        transition: background-color 0.3s;
+    }
+
+    .page-item a:hover {
+        background-color: #c5c5e0;
+    }
+
+    .page-item.active a {
+        background-color: #5d5d8d;
+        color: #fff;
+    }
+</style>
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Category List</title>
+</head>
+<body>
+<img src="https://scontent.fsgn5-9.fna.fbcdn.net/v/t39.30808-6/456964174_3718258435157172_8792433274506919085_n.jpg?_nc_cat=102&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=A9YGewYtRJ8Q7kNvgGdR7sJ&_nc_zt=23&_nc_ht=scontent.fsgn5-9.fna&_nc_gid=AU_Zrl1nb4IoNoJnWK6Fn5z&oh=00_AYBoef8APePzIpkhAh8tXM4lXpnMTxtulnPj16oTv7vXSw&oe=67282A1D"
+     alt="Logo" class="logo" />
+<h1>Category Management</h1>
+<a th:href="@{/admin/categories/addCategory}">Add category</a>
+
+
+<a th:href="@{/admin/categories/searchpaginated}">Home</a>
+
+<div th:if="${message != null}">
+    <i th:text="${message}"></i>
+</div>
+
+<form action="/admin/categories/searchpaginated" method="get">
+    <input type="text" name="categoryName" placeholder="Tìm kiếm danh mục" value="">
+    <button type="submit">Tìm kiếm</button>
+</form>
+
+<div th:if="${!categoryPage.hasContent()}">
+    <p>No Category</p>
+</div>
+
+<div th:if="${categoryPage.hasContent()}">
+    <table>
+        <tr>
+            <th>No</th>
+            <th>Images</th>
+            <th>Category Name</th>
+            <th>Actions</th>
+        </tr>
+        <tr th:each="cate, STT : ${categoryPage.content}">
+            <td th:text="${STT.index + 1}"></td>
+            <td th:text="${cate.icon}"></td>
+            <td th:text="${cate.categoryName}"></td>
+            <td>
+                <a th:href="@{/admin/categories/edit/{id}(id=${cate.categoryId})}">Edit</a>
+                <a th:href="@{/admin/categories/delete/{id}(id=${cate.categoryId})}">Delete</a>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<form method="get">
+    Page size:
+    <select name="size" id="size" th:onchange="this.form.submit()">
+        <option th:value="3" th:selected="${categoryPage.size == 3}">3</option>
+        <option th:value="5" th:selected="${categoryPage.size == 5}">5</option>
+        <option th:value="10" th:selected="${categoryPage.size == 10}">10</option>
+        <option th:value="15" th:selected="${categoryPage.size == 15}">15</option>
+        <option th:value="20" th:selected="${categoryPage.size == 20}">20</option>
+    </select>
+</form>
+
+<div th:if="${categoryPage.totalPages > 0}">
+    <ul>
+        <li th:each="pageNumber : ${pageNumbers}" th:class="${pageNumber == categoryPage.number + 1 ? 'page-item active' : 'page-item'}">
+            <a th:href="@{/admin/categories/searchpaginated(name=${name}, size=${categoryPage.size}, page=${pageNumber})}" th:text="${pageNumber}"></a>
+        </li>
+    </ul>
+</div>
+<footer>
+    <p>Phan Tat Duy 22110296.</p>
+</footer>
+</body>
+</html>

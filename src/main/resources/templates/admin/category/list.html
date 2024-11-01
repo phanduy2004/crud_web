@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Category Management</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+
+        h1 {
+            color: #5d5d8d;
+            font-size: 2em;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            color: #4a4a76;
+            font-size: 1.5em;
+            margin-top: 30px;
+            margin-bottom: 15px;
+        }
+
+        form {
+            background-color: #ffffff;
+            border: 1px solid #ddd;
+            padding: 15px;
+            border-radius: 5px;
+            max-width: 500px;
+            margin: 0 auto 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            display: block;
+            margin: 10px 0 5px;
+            font-weight: bold;
+            color: #555;
+        }
+
+        input[type="text"],
+        input[type="file"] {
+            width: calc(100% - 22px);
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1em;
+        }
+
+        button[type="submit"] {
+            background-color: #5d5d8d;
+            color: #ffffff;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1em;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #48487a;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: center;
+            font-size: 1em;
+        }
+
+        th {
+            background-color: #5d5d8d;
+            color: #fff;
+            font-weight: bold;
+        }
+
+        td img {
+            width: 50px;
+            height: auto;
+            border-radius: 4px;
+        }
+
+        td form {
+            display: inline-block;
+            margin: 0;
+        }
+
+        td button[type="submit"] {
+            background-color: #d9534f;
+            padding: 5px 10px;
+            border-radius: 3px;
+            font-size: 0.9em;
+        }
+
+        td button[type="submit"]:hover {
+            background-color: #c9302c;
+        }
+        .logo {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            width: 50px; /* Adjust size here */
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+<img src="https://scontent.fsgn5-9.fna.fbcdn.net/v/t39.30808-6/456964174_3718258435157172_8792433274506919085_n.jpg?_nc_cat=102&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=A9YGewYtRJ8Q7kNvgGdR7sJ&_nc_zt=23&_nc_ht=scontent.fsgn5-9.fna&_nc_gid=AU_Zrl1nb4IoNoJnWK6Fn5z&oh=00_AYBoef8APePzIpkhAh8tXM4lXpnMTxtulnPj16oTv7vXSw&oe=67282A1D"
+     alt="Logo" class="logo" />
+<h1>Category Management</h1>
+
+<h2>Add Category</h2>
+<form th:action="@{/api/category/addCategory}" method="post" enctype="multipart/form-data">
+    <label for="categoryName">Category Name:</label>
+    <input type="text" id="categoryName" name="categoryName" required>
+    <label for="icon">Icon:</label>
+    <input type="file" id="icon" name="icon" required>
+    <button type="submit">Add Category</button>
+</form>
+
+<h2>Category List</h2>
+<table>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Icon</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="category : ${categories}">
+        <td th:text="${category.categoryId}">1</td>
+        <td th:text="${category.categoryName}">Category Name</td>
+        <td><img th:src="@{/uploads/{icon}(icon=${category.icon})}" alt="Icon" width="50"></td>
+        <td>
+            <form th:action="@{/api/category/deleteCategory}" method="post">
+                <input type="hidden" name="categoryId" th:value="${category.categoryId}">
+                <button type="submit">Delete</button>
+            </form>
+            <form th:action="@{/api/category/edit/{id}(id=${category.categoryId})}" method="get">
+                <input type="hidden" name="categoryId" th:value="${category.categoryId}">
+                <button type="submit">Edit</button>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<footer>
+    <p>Just a bad day, not a bad life.</p>
+</footer>
+</body>
+</html>

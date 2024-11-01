@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Quản Lý Danh Mục</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/styles.css}"/>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+
+        h1 {
+            color: #5d5d8d;
+            font-size: 2em;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            color: #4a4a76;
+            font-size: 1.5em;
+            margin-top: 30px;
+            margin-bottom: 15px;
+        }
+
+        form {
+            background-color: #ffffff;
+            border: 1px solid #ddd;
+            padding: 15px;
+            border-radius: 5px;
+            max-width: 500px;
+            margin: 0 auto 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            display: block;
+            margin: 10px 0 5px;
+            font-weight: bold;
+            color: #555;
+        }
+
+        input[type="text"],
+        input[type="file"] {
+            width: calc(100% - 22px);
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1em;
+        }
+
+        button[type="submit"] {
+            background-color: #5d5d8d;
+            color: #ffffff;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1em;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #48487a;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: center;
+            font-size: 1em;
+        }
+
+        th {
+            background-color: #5d5d8d;
+            color: #fff;
+            font-weight: bold;
+        }
+
+        td img {
+            width: 50px;
+            height: auto;
+            border-radius: 4px;
+        }
+
+        td form {
+            display: inline-block;
+            margin: 0;
+        }
+
+        td button[type="submit"] {
+            background-color: #d9534f;
+            padding: 5px 10px;
+            border-radius: 3px;
+            font-size: 0.9em;
+        }
+
+        td button[type="submit"]:hover {
+            background-color: #c9302c;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <h1>Quản Lý Danh Mục</h1>
+</header>
+<div class="content">
+    <h2>Thêm Hoặc Cập Nhật Danh Mục</h2>
+    <form th:action="@{/admin/categories/updateCategory}" method="post" enctype="multipart/form-data" class="form-add">
+        <input type="hidden" name="categoryId" th:value="${category != null ? category.categoryId : ''}" />
+
+        <label for="categoryName">Tên Danh Mục:</label>
+        <input type="text" id="categoryName" name="categoryName" required class="form-control"
+               th:value="${category != null ? category.categoryName : ''}"/>
+
+        <label for="icon">Biểu Tượng:</label>
+        <input type="file" id="icon" name="icon" class="form-control"
+               th:value="${category != null ? category.icon : ''}"/>
+        <button type="submit" class="btn">Lưu Danh Mục</button>
+    </form>
+</div>
+<footer>
+    <p>Just a bad day, not a bad life.</p>
+</footer>
+</body>
+</html>
